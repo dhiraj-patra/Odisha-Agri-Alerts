@@ -15,7 +15,6 @@ import requests
 
 BASE_URL = "https://agrisnetodisha.ori.nic.in/"
 STATE_FILE = Path(__file__).resolve().parent / "agrisnet_state.json"
-LEGACY_STATE_FILE = Path(__file__).resolve().parent / "state.json"
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -74,8 +73,6 @@ def parse_notifications(html_content):
 def load_state():
     if STATE_FILE.exists():
         return json.loads(STATE_FILE.read_text(encoding="utf-8"))
-    if LEGACY_STATE_FILE.exists():
-        return json.loads(LEGACY_STATE_FILE.read_text(encoding="utf-8"))
     return {"seen_hashes": []}
 
 

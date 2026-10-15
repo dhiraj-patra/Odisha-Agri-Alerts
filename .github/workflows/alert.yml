@@ -45,10 +45,10 @@ jobs:
 
       - name: Persist state
         run: |
-          if [[ -n "$(git status --porcelain agrisnet_state.json fmdbt_state.json state.json)" ]]; then
+          if [[ -n "$(git status --porcelain agrisnet_state.json fmdbt_state.json)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add agrisnet_state.json fmdbt_state.json state.json 2>/dev/null || true
+            git add agrisnet_state.json fmdbt_state.json
             git commit -m "chore: update alert states [skip ci]"
             git push
           else
