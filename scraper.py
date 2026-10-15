@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from datetime import datetime
 import hashlib
 import html
 import json
@@ -7,6 +8,7 @@ import sys
 import time
 from pathlib import Path
 from urllib.parse import urljoin
+from zoneinfo import ZoneInfo
 
 import lxml.html
 import requests
@@ -109,8 +111,10 @@ def main():
         print("No new notifications.")
         return
 
+    current_date = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%m-%Y")
     for item in reversed(new_notifications):
-        send_telegram_message(bot_token, chat_id, item["message"])
+        message_text = f"Notification Date: {current_date}\n\n{item['message']}"
+        send_telegram_message(bot_token, chat_id, message_text)
         time.sleep(1)
 
     save_state(notifications[0]["id"])
@@ -119,4 +123,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
