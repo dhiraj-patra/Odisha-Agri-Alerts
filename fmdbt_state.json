@@ -3,51 +3,51 @@
     "General": {
       "target": 75,
       "achieved": 75,
-      "available": 10
+      "available": 0
     },
     "Scheduled Caste (SC)": {
       "target": 86,
       "achieved": 86,
-      "available": 10
+      "available": 0
     },
     "Scheduled Tribe (ST)": {
       "target": 400,
       "achieved": 400,
-      "available": 10
+      "available": 0
     }
   },
   "Reaper": {
     "General": {
       "target": 18,
       "achieved": 18,
-      "available": 5
+      "available": 0
     },
     "Scheduled Caste (SC)": {
       "target": 14,
       "achieved": 14,
-      "available": 10
+      "available": 0
     },
     "Scheduled Tribe (ST)": {
       "target": 20,
       "achieved": 20,
-      "available": 10
+      "available": 0
     }
   },
   "Power Tiller": {
     "General": {
       "target": 96,
       "achieved": 96,
-      "available": 10
+      "available": 0
     },
     "Scheduled Caste (SC)": {
       "target": 32,
       "achieved": 32,
-      "available": 10
+      "available": 0
     },
     "Scheduled Tribe (ST)": {
       "target": 164,
       "achieved": 164,
-      "available": 10
+      "available": 0
     }
   }
 }
