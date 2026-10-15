@@ -1,18 +1,18 @@
-name: Agrisnet Alert Bot
+name: Agriculture Bot
 
 on:
-  # schedule:
-  #   # Every ~10 min, offset off :00/:10 etc. GitHub delays/drops scheduled
-  #   # runs during high load (worst at the top of the hour), so the odd minutes
-  #   # get served more reliably. Runs are still best-effort, not guaranteed.
-  #   - cron: "4,14,24,34,44,54 * * * *"
+  schedule:
+    # Every ~10 min, offset off :00/:10 etc. GitHub delays/drops scheduled
+    # runs during high load (worst at the top of the hour), so the odd minutes
+    # get served more reliably. Runs are still best-effort, not guaranteed.
+    - cron: "4,14,24,34,44,54 * * * *"
   workflow_dispatch: {}   # lets you trigger a manual run from the Actions tab
 
 permissions:
   contents: write
 
 concurrency:
-  group: agrisnet-alert
+  group: agriculture-bot
   cancel-in-progress: false
 
 jobs:
@@ -31,19 +31,25 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run alert scraper
+      - name: Run Agrisnet monitor
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python scraper.py
+        run: python agrisnet.py
+
+      - name: Run FMDBT monitor
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python fmdbt.py
 
       - name: Persist state
         run: |
-          if [[ -n "$(git status --porcelain state.json)" ]]; then
+          if [[ -n "$(git status --porcelain agrisnet_state.json fmdbt_state.json state.json)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add state.json
-            git commit -m "chore: update alert state [skip ci]"
+            git add agrisnet_state.json fmdbt_state.json state.json 2>/dev/null || true
+            git commit -m "chore: update alert states [skip ci]"
             git push
           else
             echo "No state change."
