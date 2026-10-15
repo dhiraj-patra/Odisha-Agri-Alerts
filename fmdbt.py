@@ -20,11 +20,11 @@ BASE_URL = "https://fmdbt.agriodisha.nic.in"
 STATE_FILE = Path(__file__).resolve().parent / "fmdbt_state.json"
 
 FINANCIAL_YEAR = "2026-27"
-TARGET_DISTRICT = "SUNDERGARH"
-TARGET_IMPLEMENTS = ["SPL-POW- WEEDER", "Reaper", "Power Tiller"]
+DISTRICT_NAME = "SUNDERGARH"
+DISTRICT_CODE = "30"
 
-FALLBACK_DISTRICT_CODE = "30"
-FALLBACK_IMPLEMENT_IDS = {
+# Target implements mapped to their FMDBT portal implement IDs
+IMPLEMENTS = {
     "SPL-POW- WEEDER": 17,
     "Reaper": 3,
     "Power Tiller": 2,
@@ -55,10 +55,7 @@ def send_telegram_message(token, chat_id, text):
 
 def load_state():
     if STATE_FILE.exists():
-        try:
-            return json.loads(STATE_FILE.read_text(encoding="utf-8"))
-        except (json.JSONDecodeError, OSError):
-            return {}
+        return json.loads(STATE_FILE.read_text(encoding="utf-8"))
     return {}
 
 
@@ -66,92 +63,37 @@ def save_state(state):
     STATE_FILE.write_text(json.dumps(state, indent=2), encoding="utf-8")
 
 
-def resolve_district_code(session, district_name):
-    url = f"{BASE_URL}/report/getAllDistrictsfromPG"
-    try:
-        response = session.get(url, headers=HEADERS, timeout=30)
-        response.raise_for_status()
-        for item in response.json():
-            if item.get("dist_nm", "").strip().upper() == district_name.strip().upper():
-                return str(item.get("dist_code"))
-    except Exception as exc:
-        print(f"Warning: Failed to fetch district list dynamically ({exc}). Using fallback.")
-    return FALLBACK_DISTRICT_CODE
-
-
-def resolve_implement_ids(session, target_implements):
-    mapping = {}
-    url = f"{BASE_URL}/report/getImplementsfromPG"
-    try:
-        response = session.get(url, headers=HEADERS, timeout=30)
-        response.raise_for_status()
-        all_implements = response.json()
-        for target in target_implements:
-            target_clean = target.strip().lower()
-            for item in all_implements:
-                imp_name = item.get("Implement", "").strip().lower()
-                if imp_name == target_clean:
-                    mapping[target] = item.get("Impl_id")
-                    break
-    except Exception as exc:
-        print(f"Warning: Failed to fetch implements dynamically ({exc}). Using fallbacks.")
-
-    for target in target_implements:
-        if target not in mapping and target in FALLBACK_IMPLEMENT_IDS:
-            mapping[target] = FALLBACK_IMPLEMENT_IDS[target]
-    return mapping
-
-
-def fetch_target_report(session, fin_year, dist_code, imp_id):
+def fetch_target_report(fin_year, dist_code, imp_id):
     url = f"{BASE_URL}/report/loadpulltarget?finyr={fin_year}&district={dist_code}&imp={imp_id}"
     try:
-        response = session.get(url, headers=HEADERS, timeout=30)
+        response = requests.get(url, headers=HEADERS, timeout=30)
     except requests.RequestException:
         time.sleep(5)
-        response = session.get(url, headers=HEADERS, timeout=30)
+        response = requests.get(url, headers=HEADERS, timeout=30)
     response.raise_for_status()
     return response.json()
 
 
-def to_int(val, fallback=0):
-    try:
-        return int(float(val))
-    except (ValueError, TypeError):
-        return fallback
-
-
 def parse_categories(report_data):
-    if not report_data or not isinstance(report_data, list):
+    if not report_data:
         return None
     row = report_data[0]
 
-    gen_target = to_int(row.get("targetgen"))
-    gen_achieved = to_int(row.get("bookingnormal"))
-    gen_avail = to_int(row.get("phybal"), max(0, gen_target - gen_achieved))
-
-    sc_target = to_int(row.get("targetsc"))
-    sc_achieved = to_int(row.get("bookingsc"))
-    sc_avail = to_int(row.get("scbal"), max(0, sc_target - sc_achieved))
-
-    st_target = to_int(row.get("targetst"))
-    st_achieved = to_int(row.get("bookingst"))
-    st_avail = to_int(row.get("stbal"), max(0, st_target - st_achieved))
-
     return {
         "General": {
-            "target": gen_target,
-            "achieved": gen_achieved,
-            "available": gen_avail,
+            "target": int(row.get("targetgen", 0)),
+            "achieved": int(row.get("bookingnormal", 0)),
+            "available": int(row.get("phybal", 0)),
         },
         "Scheduled Caste (SC)": {
-            "target": sc_target,
-            "achieved": sc_achieved,
-            "available": sc_avail,
+            "target": int(row.get("targetsc", 0)),
+            "achieved": int(row.get("bookingsc", 0)),
+            "available": int(row.get("scbal", 0)),
         },
         "Scheduled Tribe (ST)": {
-            "target": st_target,
-            "achieved": st_achieved,
-            "available": st_avail,
+            "target": int(row.get("targetst", 0)),
+            "achieved": int(row.get("bookingst", 0)),
+            "available": int(row.get("stbal", 0)),
         },
     }
 
@@ -190,18 +132,9 @@ def main():
     state_changed = False
     alerts_sent = 0
 
-    session = requests.Session()
-    dist_code = resolve_district_code(session, TARGET_DISTRICT)
-    implement_mapping = resolve_implement_ids(session, TARGET_IMPLEMENTS)
-
-    for imp_name in TARGET_IMPLEMENTS:
-        imp_id = implement_mapping.get(imp_name)
-        if imp_id is None:
-            print(f"Skipping {imp_name}: implement ID could not be resolved.")
-            continue
-
+    for imp_name, imp_id in IMPLEMENTS.items():
         try:
-            report_data = fetch_target_report(session, FINANCIAL_YEAR, dist_code, imp_id)
+            report_data = fetch_target_report(FINANCIAL_YEAR, DISTRICT_CODE, imp_id)
         except requests.RequestException as exc:
             print(f"Error fetching report for {imp_name}: {exc}")
             continue
@@ -242,7 +175,7 @@ def main():
         # New availability or values changed
         print(f"Positive target availability detected for {imp_name}! Sending alert...")
         message = format_alert_message(
-            TARGET_DISTRICT, FINANCIAL_YEAR, imp_name, positive_cats
+            DISTRICT_NAME, FINANCIAL_YEAR, imp_name, positive_cats
         )
         send_telegram_message(bot_token, chat_id, message)
         alerts_sent += 1
