@@ -2,7 +2,6 @@
 import hashlib
 import json
 import os
-import re
 import sys
 import time
 from pathlib import Path
@@ -34,13 +33,10 @@ def send_telegram_message(token, chat_id, text):
 
 
 def format_message(text, links):
-    message = f"Agrisnet Odisha - What's New:\n\n{text}"
-    if len(links) == 1:
-        return f"{message}\n\nLink: {links[0]}"
-    if len(links) > 1:
-        links_list = "\n".join(f"- {link}" for link in links)
-        return f"{message}\n\nLinks:\n{links_list}"
-    return message
+    extra_links = [link for link in links if link not in text]
+    if extra_links:
+        return f"{text}\n\n" + "\n".join(extra_links)
+    return text
 
 
 def parse_notifications(html):
@@ -48,8 +44,8 @@ def parse_notifications(html):
     notifications = []
 
     for li in document.xpath("//*[@id='WhatsNew']//li"):
-        raw_text = " ".join(li.text_content().split())
-        text = re.sub(r"\s*Click Here\.?\s*$", "", raw_text, flags=re.IGNORECASE).strip()
+        raw_text = li.text_content()
+        text = "\n".join(" ".join(line.split()) for line in raw_text.splitlines() if line.strip())
         if not text:
             continue
 
@@ -71,17 +67,16 @@ def parse_notifications(html):
 
 def load_state():
     if not STATE_FILE.exists():
-        return {"initialized": False, "seen_ids": []}
+        return {"seen_hashes": []}
     try:
         return json.loads(STATE_FILE.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError):
-        return {"initialized": False, "seen_ids": []}
+        return {"seen_hashes": []}
 
 
-def save_state(seen_ids):
+def save_state(latest_hash):
     data = {
-        "initialized": True,
-        "seen_ids": seen_ids[:300],
+        "seen_hashes": [latest_hash],
     }
     STATE_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
@@ -93,8 +88,7 @@ def main():
         sys.exit("Error: Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID environment variable.")
 
     state = load_state()
-    seen_ids = set(state.get("seen_ids", []))
-    is_initialized = state.get("initialized", False) and bool(seen_ids)
+    seen_hashes = state.get("seen_hashes", [])
 
     response = requests.get(BASE_URL, headers=HEADERS, timeout=30)
     response.raise_for_status()
@@ -104,22 +98,30 @@ def main():
         print("No notifications found on page.")
         return
 
-    if not is_initialized:
+    latest_item = notifications[0]
+
+    # First run: send latest notification and save its hash
+    if not seen_hashes:
         print("Initializing state. Sending latest notification...")
-        first_item = notifications[0]
         send_telegram_message(
             bot_token,
             chat_id,
-            format_message(first_item["text"], first_item["links"]),
+            format_message(latest_item["text"], latest_item["links"]),
         )
-        all_ids = [item["id"] for item in notifications]
-        save_state(all_ids)
+        save_state(latest_item["id"])
         return
 
-    new_notifications = [item for item in notifications if item["id"] not in seen_ids]
-    if not new_notifications:
+    last_seen_hash = seen_hashes[0]
+    if latest_item["id"] == last_seen_hash:
         print("No new notifications.")
         return
+
+    # Collect all new notifications that appeared above the last seen one
+    new_notifications = []
+    for item in notifications:
+        if item["id"] == last_seen_hash:
+            break
+        new_notifications.append(item)
 
     for item in reversed(new_notifications):
         send_telegram_message(
@@ -129,11 +131,7 @@ def main():
         )
         time.sleep(1.5)
 
-    new_ids = [item["id"] for item in new_notifications]
-    updated_seen_ids = new_ids + [
-        item_id for item_id in state.get("seen_ids", []) if item_id not in set(new_ids)
-    ]
-    save_state(updated_seen_ids)
+    save_state(latest_item["id"])
     print(f"Sent {len(new_notifications)} new notification(s).")
 
 
