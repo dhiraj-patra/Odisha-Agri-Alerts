@@ -90,7 +90,11 @@ def main():
     state = load_state()
     seen_hashes = state.get("seen_hashes", [])
 
-    response = requests.get(BASE_URL, headers=HEADERS, timeout=30)
+    try:
+        response = requests.get(BASE_URL, headers=HEADERS, timeout=30)
+    except requests.RequestException:
+        time.sleep(10)
+        response = requests.get(BASE_URL, headers=HEADERS, timeout=30)
     response.raise_for_status()
     notifications = parse_notifications(response.text)
 
