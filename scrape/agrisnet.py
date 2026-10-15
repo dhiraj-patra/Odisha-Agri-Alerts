@@ -115,9 +115,13 @@ def main():
         print("No new notifications.")
         return
 
-    current_date = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%m-%Y")
+    current_date = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%m-%Y %I:%M %p")
     for item in reversed(new_notifications):
-        message_text = f"<b>Date:</b> {current_date}\n\n{item['message']}"
+        message_text = (
+            f"<b>Agrisnet What's New:</b>\n"
+            f"<b>Date:</b> {current_date}\n\n"
+            f"{item['message']}"
+        )
         send_telegram_message(bot_token, chat_id, message_text)
         time.sleep(1)
 
