@@ -98,7 +98,7 @@ def parse_categories(report_data):
     }
 
 
-def format_alert_message(district_name, fin_year, implement_name, positive_categories):
+def format_alert_message(district_name, fin_year, implement_name, categories):
     current_time = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%m-%Y %I:%M %p")
     lines = [
         "🚜 <b>FMDBT Target Alert</b>",
@@ -107,9 +107,9 @@ def format_alert_message(district_name, fin_year, implement_name, positive_categ
         f"<b>District:</b> {html.escape(district_name)}",
         f"<b>Implement:</b> {html.escape(implement_name)}",
         "",
-        "<b>Available Targets:</b>",
+        "<b>Target Status:</b>",
     ]
-    for cat_name, vals in positive_categories.items():
+    for cat_name, vals in categories.items():
         lines.append(
             f"• <b>{html.escape(cat_name)}:</b> "
             f"Available: <b>{vals['available']}</b> "
@@ -144,45 +144,29 @@ def main():
             print(f"No target data returned for {imp_name}.")
             continue
 
+        prev_report = state.get(imp_name)
+        if isinstance(prev_report, dict) and "last_report" in prev_report:
+            prev_report = prev_report["last_report"]
+
+        if prev_report == categories:
+            print(f"No changes for {imp_name}.")
+            continue
+
+        # A target, achieved, or available value has changed!
+        print(f"Report change detected for {imp_name}! Sending alert...")
         positive_cats = {
             cat: vals for cat, vals in categories.items() if vals["available"] > 0
         }
+        alert_cats = positive_cats if positive_cats else categories
 
-        imp_state = state.setdefault(imp_name, {})
-        prev_alerted = imp_state.get("last_alerted")
-
-        if not positive_cats:
-            print(f"No positive availability for {imp_name}.")
-            if prev_alerted is not None:
-                imp_state["last_alerted"] = None
-                state_changed = True
-            if imp_state.get("last_report") != categories:
-                imp_state["last_report"] = categories
-                state_changed = True
-            continue
-
-        # Positive availability detected
-        if prev_alerted == positive_cats:
-            print(
-                f"No change in positive availability for {imp_name} "
-                f"({len(positive_cats)} category/categories already alerted)."
-            )
-            if imp_state.get("last_report") != categories:
-                imp_state["last_report"] = categories
-                state_changed = True
-            continue
-
-        # New availability or values changed
-        print(f"Positive target availability detected for {imp_name}! Sending alert...")
         message = format_alert_message(
-            DISTRICT_NAME, FINANCIAL_YEAR, imp_name, positive_cats
+            DISTRICT_NAME, FINANCIAL_YEAR, imp_name, alert_cats
         )
         send_telegram_message(bot_token, chat_id, message)
         alerts_sent += 1
         time.sleep(1)
 
-        imp_state["last_alerted"] = positive_cats
-        imp_state["last_report"] = categories
+        state[imp_name] = categories
         state_changed = True
 
     if state_changed:

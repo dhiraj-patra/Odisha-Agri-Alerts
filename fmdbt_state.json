@@ -1,59 +1,53 @@
 {
   "SPL-POW- WEEDER": {
-    "last_report": {
-      "General": {
-        "target": 75,
-        "achieved": 75,
-        "available": 0
-      },
-      "Scheduled Caste (SC)": {
-        "target": 86,
-        "achieved": 86,
-        "available": 0
-      },
-      "Scheduled Tribe (ST)": {
-        "target": 400,
-        "achieved": 400,
-        "available": 0
-      }
+    "General": {
+      "target": 75,
+      "achieved": 75,
+      "available": 0
+    },
+    "Scheduled Caste (SC)": {
+      "target": 86,
+      "achieved": 86,
+      "available": 0
+    },
+    "Scheduled Tribe (ST)": {
+      "target": 400,
+      "achieved": 400,
+      "available": 0
     }
   },
   "Reaper": {
-    "last_report": {
-      "General": {
-        "target": 18,
-        "achieved": 18,
-        "available": 0
-      },
-      "Scheduled Caste (SC)": {
-        "target": 14,
-        "achieved": 14,
-        "available": 0
-      },
-      "Scheduled Tribe (ST)": {
-        "target": 20,
-        "achieved": 20,
-        "available": 0
-      }
+    "General": {
+      "target": 18,
+      "achieved": 18,
+      "available": 0
+    },
+    "Scheduled Caste (SC)": {
+      "target": 14,
+      "achieved": 14,
+      "available": 0
+    },
+    "Scheduled Tribe (ST)": {
+      "target": 20,
+      "achieved": 20,
+      "available": 0
     }
   },
   "Power Tiller": {
-    "last_report": {
-      "General": {
-        "target": 96,
-        "achieved": 96,
-        "available": 0
-      },
-      "Scheduled Caste (SC)": {
-        "target": 32,
-        "achieved": 32,
-        "available": 0
-      },
-      "Scheduled Tribe (ST)": {
-        "target": 164,
-        "achieved": 164,
-        "available": 0
-      }
+    "General": {
+      "target": 96,
+      "achieved": 96,
+      "available": 0
+    },
+    "Scheduled Caste (SC)": {
+      "target": 32,
+      "achieved": 32,
+      "available": 0
+    },
+    "Scheduled Tribe (ST)": {
+      "target": 164,
+      "achieved": 164,
+      "available": 0
     }
   }
 }
