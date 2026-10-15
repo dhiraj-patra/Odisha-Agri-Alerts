@@ -113,7 +113,7 @@ def main():
 
     current_date = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%m-%Y")
     for item in reversed(new_notifications):
-        message_text = f"Notification Date: {current_date}\n\n{item['message']}"
+        message_text = f"<b>Date:</b> {current_date}\n\n{item['message']}"
         send_telegram_message(bot_token, chat_id, message_text)
         time.sleep(1)
 
