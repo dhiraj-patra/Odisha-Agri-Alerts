@@ -1,0 +1,50 @@
+name: Agrisnet Alert Bot
+
+on:
+  # schedule:
+  #   # Every ~10 min, offset off :00/:10 etc. GitHub delays/drops scheduled
+  #   # runs during high load (worst at the top of the hour), so the odd minutes
+  #   # get served more reliably. Runs are still best-effort, not guaranteed.
+  #   - cron: "4,14,24,34,44,54 * * * *"
+  workflow_dispatch: {}   # lets you trigger a manual run from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: agrisnet-alert
+  cancel-in-progress: false
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run alert scraper
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scraper.py
+
+      - name: Persist state
+        run: |
+          if [[ -n "$(git status --porcelain state.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add state.json
+            git commit -m "chore: update alert state [skip ci]"
+            git push
+          else
+            echo "No state change."
+          fi
