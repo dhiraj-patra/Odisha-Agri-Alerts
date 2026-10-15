@@ -100,24 +100,28 @@ def parse_categories(report_data):
 
 def format_alert_message(district_name, fin_year, implement_name, categories):
     current_time = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%m-%Y %I:%M %p")
+    escaped_imp = html.escape(implement_name)
     lines = [
-        "🚜 <b>FMDBT Target Alert</b>",
+        f"🎯 <b>Target Alert for {escaped_imp}</b>",
+        "",
         f"<b>Date:</b> {current_time}",
         f"<b>Financial Year:</b> {html.escape(fin_year)}",
         f"<b>District:</b> {html.escape(district_name)}",
-        f"<b>Implement:</b> {html.escape(implement_name)}",
+        f"<b>Implement:</b> {escaped_imp}",
         "",
         "<b>Target Status:</b>",
     ]
     for cat_name, vals in categories.items():
-        lines.append(
-            f"• <b>{html.escape(cat_name)}:</b> "
-            f"Available: <b>{vals['available']}</b> "
-            f"(Target: {vals['target']}, Achieved: {vals['achieved']})"
-        )
+        lines.extend([
+            "",
+            f"• <b>{html.escape(cat_name)}:</b>",
+            f"    - Target: {vals['target']}",
+            f"    - Achieved: {vals['achieved']}",
+            f"    - Available: <b>{vals['available']}</b>",
+        ])
     lines.extend([
         "",
-        '🔗 <a href="https://fmdbt.agriodisha.nic.in/public/chktarget">FMDBT Target Portal</a>',
+        "<b>Book here:</b> https://fmdbt.agriodisha.nic.in",
     ])
     return "\n".join(lines)
 
