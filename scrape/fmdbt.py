@@ -17,7 +17,7 @@ from zoneinfo import ZoneInfo
 import requests
 
 BASE_URL = "https://fmdbt.agriodisha.nic.in"
-STATE_FILE = Path(__file__).resolve().parent / "fmdbt_state.json"
+STATE_FILE = Path(__file__).resolve().parent.parent / "fmdbt_state.json"
 
 FINANCIAL_YEAR = "2026-27"
 DISTRICT_NAME = "SUNDERGARH"

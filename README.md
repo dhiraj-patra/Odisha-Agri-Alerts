@@ -11,14 +11,14 @@ Inspired by the clean architecture of [ezioMJ/Movie-Alert](https://github.com/ez
 
 ## Monitors Overview
 
-### 1. Agrisnet Odisha Monitor (`agrisnet.py`)
+### 1. Agrisnet Odisha Monitor (`scrape/agrisnet.py`)
 - **Portal:** [AGRISNET Odisha](https://agrisnetodisha.ori.nic.in/)
 - **Monitors:** "What's New" announcements and circulars.
 - **Duplicate Prevention:** SHA-256 fingerprinting of notice text and target URLs.
 - **Smart Bootstrap:** On the very first run, sends only the most recent notice as a confirmation ping while saving all existing notices as seen.
 - **State File:** `agrisnet_state.json`
 
-### 2. FMDBT Odisha Target Monitor (`fmdbt.py`)
+### 2. FMDBT Odisha Target Monitor (`scrape/fmdbt.py`)
 - **Portal:** [Odisha FMDBT Target Status](https://fmdbt.agriodisha.nic.in/public/chktarget)
 - **Monitored Configuration:**
   - **Financial Year:** `2026-27`
@@ -70,8 +70,8 @@ The booking page will be closed from 03.00 PM on Dt.31.08.2026 for the top-up of
 
 ```mermaid
 flowchart TD
-    A["GitHub Actions (10-min Cron / Manual Trigger)"] --> B["agrisnet.py"]
-    A --> C["fmdbt.py"]
+    A["GitHub Actions (10-min Cron / Manual Trigger)"] --> B["scrape/agrisnet.py"]
+    A --> C["scrape/fmdbt.py"]
     
     subgraph Agrisnet Monitor
         B --> D["Fetch agrisnetodisha.ori.nic.in"]
@@ -98,8 +98,8 @@ flowchart TD
 ```
 
 1. **Trigger:** GitHub Actions runs every ~10 minutes via cron (`4,14,24,34,44,54 * * * *`) or manually on demand.
-2. **Execution:** Runs `agrisnet.py` and `fmdbt.py` independently.
-3. **State Isolation:** `agrisnet.py` maintains `agrisnet_state.json` and `fmdbt.py` maintains `fmdbt_state.json`.
+2. **Execution:** Runs `scrape/agrisnet.py` and `scrape/fmdbt.py` independently.
+3. **State Isolation:** `scrape/agrisnet.py` maintains `agrisnet_state.json` and `scrape/fmdbt.py` maintains `fmdbt_state.json`.
 4. **State Persistence:** If any state file changes, the workflow automatically commits and pushes them back to GitHub.
 
 ---
@@ -148,8 +148,9 @@ Odisha-Agri-Alerts/
 ├── .gitignore                # Git ignore rules for Python
 ├── README.md                 # Project documentation and guide
 ├── requirements.txt          # Python dependencies (requests, lxml)
-├── agrisnet.py               # AGRISNET Odisha announcement monitor
+├── scrape/
+│   ├── agrisnet.py           # AGRISNET Odisha announcement monitor
+│   └── fmdbt.py              # FMDBT target and availability monitor
 ├── agrisnet_state.json        # Persistent state for AGRISNET notices
-├── fmdbt.py                  # FMDBT target and availability monitor
 └── fmdbt_state.json          # Persistent state for FMDBT implements
 ```

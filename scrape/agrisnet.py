@@ -14,7 +14,7 @@ import lxml.html
 import requests
 
 BASE_URL = "https://agrisnetodisha.ori.nic.in/"
-STATE_FILE = Path(__file__).resolve().parent / "agrisnet_state.json"
+STATE_FILE = Path(__file__).resolve().parent.parent / "agrisnet_state.json"
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
