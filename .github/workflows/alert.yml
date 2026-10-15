@@ -1,4 +1,4 @@
-name: Agriculture Bot
+name: Odisha Agri Alerts
 
 on:
   # schedule:
@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: agriculture-bot
+  group: odisha-agri-alerts
   cancel-in-progress: false
 
 jobs:

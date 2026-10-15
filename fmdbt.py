@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""FMDBT Target Monitoring Bot for Agriculture-Bot.
+"""FMDBT Target Monitoring Bot for Odisha-Agri-Alerts.
 
 Monitors Odisha FMDBT public target portal for district target allocation,
 achieved bookings, and positive availability for configured implements.

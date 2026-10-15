@@ -1,6 +1,6 @@
-# Agriculture Bot
+# Odisha Agri Alerts
 
-[![Agriculture Bot](https://github.com/dhiraj-patra/Agriculture-Bot/actions/workflows/alert.yml/badge.svg)](https://github.com/dhiraj-patra/Agriculture-Bot/actions/workflows/alert.yml)
+[![Odisha Agri Alerts](https://github.com/dhiraj-patra/Odisha-Agri-Alerts/actions/workflows/alert.yml/badge.svg)](https://github.com/dhiraj-patra/Odisha-Agri-Alerts/actions/workflows/alert.yml)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 
 A lightweight, serverless Telegram bot that monitors Odisha agriculture portals for real-time announcements, DBT farm machinery targets, and positive implement availability.
@@ -133,7 +133,7 @@ GitHub Actions needs permission to commit updated state files:
 
 ### 4. Trigger & Test
 1. Go to the **Actions** tab in your GitHub repository.
-2. Select **Agriculture Bot** from the left sidebar.
+2. Select **Odisha Agri Alerts** from the left sidebar.
 3. Click **Run workflow** > **Run workflow**.
 
 ---
@@ -141,7 +141,7 @@ GitHub Actions needs permission to commit updated state files:
 ## Project Structure
 
 ```text
-Agriculture-Bot/
+Odisha-Agri-Alerts/
 ├── .github/
 │   └── workflows/
 │       └── alert.yml         # GitHub Actions workflow (10-min schedule & dispatch)
