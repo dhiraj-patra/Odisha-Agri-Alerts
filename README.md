@@ -124,33 +124,6 @@ GitHub's built-in scheduler (`schedule.cron`) is best-effort and can experience 
 
 ---
 
-## Local Development & Testing
-
-```bash
-# Clone the repository
-git clone https://github.com/dhiraj-patra/Agrisnet-Alert-Bot.git
-cd Agrisnet-Alert-Bot
-
-# Set up virtual environment
-python -m venv .venv
-# On Windows:
-.venv\Scripts\activate
-# On Linux/macOS:
-source .venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set your credentials
-export TELEGRAM_BOT_TOKEN="your_token"
-export TELEGRAM_CHAT_ID="your_chat_id"
-
-# Run the scraper
-python scraper.py
-```
-
----
-
 ## Project Structure
 
 This repository is kept strictly minimal with only six files:
