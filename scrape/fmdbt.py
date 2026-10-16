@@ -149,9 +149,6 @@ def main():
             continue
 
         prev_report = state.get(imp_name)
-        if isinstance(prev_report, dict) and "last_report" in prev_report:
-            prev_report = prev_report["last_report"]
-
         if prev_report == categories:
             print(f"No changes for {imp_name}.")
             continue
