@@ -88,7 +88,7 @@ def main():
         sys.exit("Error: Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID environment variable.")
 
     state = load_state()
-    seen_hashes = state.get("seen_hashes", [])
+    json_data = state.get("seen_hashes", [])
 
     try:
         response = requests.get(BASE_URL, headers=HEADERS, timeout=30)
@@ -102,12 +102,12 @@ def main():
         print("No notifications found on page.")
         return
 
-    if not seen_hashes:
+    if not json_data:
         new_notifications = [notifications[0]]
     else:
         new_notifications = []
         for item in notifications:
-            if item["id"] == seen_hashes[0]:
+            if item["id"] == json_data[0]:
                 break
             new_notifications.append(item)
 
