@@ -56,8 +56,8 @@ def save_state(state):
     STATE_FILE.write_text(json.dumps(state, indent=2), encoding="utf-8")
 
 
-def fetch_target_report(fin_year, dist_code, Impl_id):
-    url = f"{BASE_URL}/report/loadpulltarget?finyr={fin_year}&district={dist_code}&imp={Impl_id}"
+def fetch_target_report(fin_year, dist_code, impl_id):
+    url = f"{BASE_URL}/report/loadpulltarget?finyr={fin_year}&district={dist_code}&imp={impl_id}"
     try:
         response = requests.get(url, headers=HEADERS, timeout=30)
     except requests.RequestException:
@@ -129,33 +129,33 @@ def main():
     state_changed = False
     alerts_sent = 0
 
-    for Impl_name, Impl_id in IMPLEMENTS.items():
+    for impl_name, impl_id in IMPLEMENTS.items():
         try:
-            report_data = fetch_target_report(FINANCIAL_YEAR, DISTRICT_CODE, Impl_id)
+            report_data = fetch_target_report(FINANCIAL_YEAR, DISTRICT_CODE, impl_id)
         except requests.RequestException as exc:
-            print(f"Error fetching report for {Impl_name}: {exc}")
+            print(f"Error fetching report for {impl_name}: {exc}")
             continue
 
         categories = parse_categories(report_data)
         if not categories:
-            print(f"No target data returned for {Impl_name}.")
+            print(f"No target data returned for {impl_name}.")
             continue
 
-        json_data = state.get(Impl_name)
+        json_data = state.get(impl_name)
         if json_data == categories:
-            print(f"No changes for {Impl_name}.")
+            print(f"No changes for {impl_name}.")
             continue
 
-        print(f"Report change detected for {Impl_name}! Sending alert...")
+        print(f"Report change detected for {impl_name}! Sending alert...")
 
         message = format_alert_message(
-            DISTRICT_NAME, FINANCIAL_YEAR, Impl_name, categories
+            DISTRICT_NAME, FINANCIAL_YEAR, impl_name, categories
         )
         send_telegram_message(bot_token, chat_id, message)
         alerts_sent += 1
         time.sleep(1)
 
-        state[Impl_name] = categories
+        state[impl_name] = categories
         state_changed = True
 
     if state_changed:
