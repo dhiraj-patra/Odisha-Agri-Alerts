@@ -134,7 +134,6 @@ def main():
 
     state = load_state()
     state_changed = False
-    alerts_sent = 0
 
     for imp_name, imp_id in IMPLEMENTS.items():
         try:
@@ -156,18 +155,12 @@ def main():
             print(f"No changes for {imp_name}.")
             continue
 
-        # A target, achieved, or available value has changed!
         print(f"Report change detected for {imp_name}! Sending alert...")
-        positive_cats = {
-            cat: vals for cat, vals in categories.items() if vals["available"] > 0
-        }
-        alert_cats = positive_cats if positive_cats else categories
 
         message = format_alert_message(
-            DISTRICT_NAME, FINANCIAL_YEAR, imp_name, alert_cats
+            DISTRICT_NAME, FINANCIAL_YEAR, imp_name, categories
         )
         send_telegram_message(bot_token, chat_id, message)
-        alerts_sent += 1
         time.sleep(1)
 
         state[imp_name] = categories
