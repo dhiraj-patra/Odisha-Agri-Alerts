@@ -134,6 +134,7 @@ def main():
 
     state = load_state()
     state_changed = False
+    alerts_sent = 0
 
     for imp_name, imp_id in IMPLEMENTS.items():
         try:
@@ -161,6 +162,7 @@ def main():
             DISTRICT_NAME, FINANCIAL_YEAR, imp_name, categories
         )
         send_telegram_message(bot_token, chat_id, message)
+        alerts_sent += 1
         time.sleep(1)
 
         state[imp_name] = categories
