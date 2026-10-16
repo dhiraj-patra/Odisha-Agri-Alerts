@@ -28,6 +28,7 @@ IMPLEMENTS = {
     "SPL-POW- WEEDER": 17,
     "Reaper": 3,
     "Power Tiller": 2,
+    "Transplanter": 4,
 }
 
 HEADERS = {
