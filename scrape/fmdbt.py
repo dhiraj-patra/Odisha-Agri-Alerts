@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-"""FMDBT Target Monitoring Bot for Odisha-Agri-Alerts.
-
-Monitors Odisha FMDBT public target portal for district target allocation,
-achieved bookings, and positive availability for configured implements.
-"""
-
 from datetime import datetime
 import html
 import json
@@ -23,7 +16,6 @@ FINANCIAL_YEAR = "2026-27"
 DISTRICT_NAME = "SUNDERGARH"
 DISTRICT_CODE = "30"
 
-# Target implements mapped to their FMDBT portal implement IDs
 IMPLEMENTS = {
     "SPL-POW- WEEDER": 17,
     "Reaper": 3,
