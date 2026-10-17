@@ -50,6 +50,23 @@
       "available": 0
     }
   },
+  "Combine": {
+    "General": {
+      "target": 96,
+      "achieved": 96,
+      "available": 0
+    },
+    "Scheduled Caste (SC)": {
+      "target": 32,
+      "achieved": 32,
+      "available": 0
+    },
+    "Scheduled Tribe (ST)": {
+      "target": 164,
+      "achieved": 164,
+      "available": 0
+    }
+  },
   "Transplanter": {
     "General": {
       "target": 5,

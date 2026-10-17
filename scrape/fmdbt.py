@@ -21,6 +21,7 @@ IMPLEMENTS = {
     "Reaper": 3,
     "Power Tiller": 2,
     "Transplanter": 4,
+    "Combine": 9,
 }
 
 HEADERS = {

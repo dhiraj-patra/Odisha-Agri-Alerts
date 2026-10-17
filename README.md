@@ -28,6 +28,7 @@ Inspired by the clean architecture of [ezioMJ/Movie-Alert](https://github.com/ez
     - `Reaper`
     - `Power Tiller`
     - `Transplanter`
+    - `Combine`
 - **Extracted Categories:** District-wise Target, Achieved, and Available figures for:
   - **General**
   - **Scheduled Caste (SC)**
