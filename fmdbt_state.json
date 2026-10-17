@@ -52,18 +52,18 @@
   },
   "Combine": {
     "General": {
-      "target": 96,
-      "achieved": 96,
+      "target": 1,
+      "achieved": 1,
       "available": 0
     },
     "Scheduled Caste (SC)": {
-      "target": 32,
-      "achieved": 32,
+      "target": 0,
+      "achieved": 0,
       "available": 0
     },
     "Scheduled Tribe (ST)": {
-      "target": 164,
-      "achieved": 164,
+      "target": 1,
+      "achieved": 1,
       "available": 0
     }
   },
