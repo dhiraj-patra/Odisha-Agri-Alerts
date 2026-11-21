@@ -118,12 +118,14 @@ def parse_categories(report_data):
 def format_alert_message(report_title, location_label, location_name, financial_year, implement_name, categories):
     current_time = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%m-%Y %I:%M %p")
     lines = [
-        f"<b>{html.escape(report_title)}:</b>",
+        f"<b>📊 {html.escape(report_title)}:</b>",
         "",
+        "<blockquote expandable>",
         f"<b>Date:</b> {current_time}",
         f"<b>Financial Year:</b> {html.escape(financial_year)}",
         f"<b>{html.escape(location_label)}:</b> {html.escape(location_name)}",
         f"<b>Implement:</b> {html.escape(implement_name)}",
+        "</blockquote>",
         "",
         "<b>Target Status:</b>",
     ]
@@ -131,7 +133,7 @@ def format_alert_message(report_title, location_label, location_name, financial_
         lines.extend([
             "",
             f"<b>{html.escape(category_name)}:</b>",
-            f"Target: {values['target']} | Achieved: {values['achieved']} | Available: {values['available']}",
+            f"<blockquote expandable>Target: {values['target']} | Achieved: {values['achieved']} | Available: {values['available']}</blockquote>",
         ])
     return "\n".join(lines)
 
