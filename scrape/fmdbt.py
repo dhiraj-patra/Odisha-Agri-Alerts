@@ -24,6 +24,27 @@ IMPLEMENTS = {
     "Combine": 9,
 }
 
+REPORTS = {
+    "district": {
+        "title": "District-wise Target Report",
+        "location_label": "District",
+        "location_name": DISTRICT_NAME,
+        "url": f"{BASE_URL}/report/loadpulltarget?finyr={FINANCIAL_YEAR}&district={DISTRICT_CODE}&imp={{implement_id}}",
+    },
+    "state": {
+        "title": "State-wise Target Report",
+        "location_label": "State",
+        "location_name": "ODISHA",
+        "url": f"{BASE_URL}/report/checkDatainStateTargetReport?finyr={FINANCIAL_YEAR}&imp={{implement_id}}",
+    },
+    "mela": {
+        "title": "Mela Target Report",
+        "location_label": "District",
+        "location_name": DISTRICT_NAME,
+        "url": f"{BASE_URL}/report/checkDataInMelaTarget?finyr={FINANCIAL_YEAR}&imp={{implement_id}}&dist={DISTRICT_CODE}",
+    },
+}
+
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -49,16 +70,18 @@ def send_telegram_message(token, chat_id, text):
 
 def load_state():
     if STATE_FILE.exists():
-        return json.loads(STATE_FILE.read_text(encoding="utf-8"))
-    return {}
+        state_data = json.loads(STATE_FILE.read_text(encoding="utf-8"))
+        if any(report_type in state_data for report_type in ("district", "state", "mela")):
+            return state_data
+        return {"district": state_data, "state": {}, "mela": {}}
+    return {"district": {}, "state": {}, "mela": {}}
 
 
 def save_state(state):
     STATE_FILE.write_text(json.dumps(state, indent=2), encoding="utf-8")
 
 
-def fetch_target_report(fin_year, dist_code, impl_id):
-    url = f"{BASE_URL}/report/loadpulltarget?finyr={fin_year}&district={dist_code}&imp={impl_id}"
+def fetch_target_report(url):
     try:
         response = requests.get(url, headers=HEADERS, timeout=30)
     except requests.RequestException:
@@ -92,31 +115,24 @@ def parse_categories(report_data):
     }
 
 
-def format_alert_message(district_name, fin_year, implement_name, categories):
+def format_alert_message(report_title, location_label, location_name, financial_year, implement_name, categories):
     current_time = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%m-%Y %I:%M %p")
-    escaped_imp = html.escape(implement_name)
     lines = [
-        f"🎯 <b>Target Alert for {escaped_imp}</b>",
+        f"<b>{html.escape(report_title)}:</b>",
         "",
         f"<b>Date:</b> {current_time}",
-        f"<b>Financial Year:</b> {html.escape(fin_year)}",
-        f"<b>District:</b> {html.escape(district_name)}",
-        f"<b>Implement:</b> {escaped_imp}",
+        f"<b>Financial Year:</b> {html.escape(financial_year)}",
+        f"<b>{html.escape(location_label)}:</b> {html.escape(location_name)}",
+        f"<b>Implement:</b> {html.escape(implement_name)}",
         "",
         "<b>Target Status:</b>",
     ]
-    for cat_name, vals in categories.items():
+    for category_name, values in categories.items():
         lines.extend([
             "",
-            f"• <b>{html.escape(cat_name)}:</b>",
-            f"    - Target: {vals['target']}",
-            f"    - Achieved: {vals['achieved']}",
-            f"    - Available: <b>{vals['available']}</b>",
+            f"<b>{html.escape(category_name)}:</b>",
+            f"Target: {values['target']} | Achieved: {values['achieved']} | Available: {values['available']}",
         ])
-    lines.extend([
-        "",
-        "<b>Book here:</b> https://fmdbt.agriodisha.nic.in",
-    ])
     return "\n".join(lines)
 
 
@@ -130,34 +146,40 @@ def main():
     state_changed = False
     alerts_sent = 0
 
-    for impl_name, impl_id in IMPLEMENTS.items():
-        try:
-            report_data = fetch_target_report(FINANCIAL_YEAR, DISTRICT_CODE, impl_id)
-        except requests.RequestException as exc:
-            print(f"Error fetching report for {impl_name}: {exc}")
-            continue
+    for report_type, report_config in REPORTS.items():
+        report_state = state.setdefault(report_type, {})
+        for implement_name, implement_id in IMPLEMENTS.items():
+            try:
+                report_data = fetch_target_report(report_config["url"].format(implement_id=implement_id))
+            except requests.RequestException as exc:
+                print(f"Error fetching {report_config['title']} for {implement_name}: {exc}")
+                continue
 
-        categories = parse_categories(report_data)
-        if not categories:
-            print(f"No target data returned for {impl_name}.")
-            continue
+            categories = parse_categories(report_data)
+            if not categories:
+                print(f"No target data returned for {report_config['title']} ({implement_name}).")
+                continue
 
-        json_data = state.get(impl_name)
-        if json_data == categories:
-            print(f"No changes for {impl_name}.")
-            continue
+            if report_state.get(implement_name) == categories:
+                print(f"No changes for {report_config['title']} ({implement_name}).")
+                continue
 
-        print(f"Report change detected for {impl_name}! Sending alert...")
+            print(f"Report change detected for {report_config['title']} ({implement_name})! Sending alert...")
 
-        message = format_alert_message(
-            DISTRICT_NAME, FINANCIAL_YEAR, impl_name, categories
-        )
-        send_telegram_message(bot_token, chat_id, message)
-        alerts_sent += 1
-        time.sleep(1)
+            message = format_alert_message(
+                report_config["title"],
+                report_config["location_label"],
+                report_config["location_name"],
+                FINANCIAL_YEAR,
+                implement_name,
+                categories,
+            )
+            send_telegram_message(bot_token, chat_id, message)
+            alerts_sent += 1
+            time.sleep(1)
 
-        state[impl_name] = categories
-        state_changed = True
+            report_state[implement_name] = categories
+            state_changed = True
 
     if state_changed:
         save_state(state)

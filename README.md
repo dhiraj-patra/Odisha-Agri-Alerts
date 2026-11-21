@@ -20,24 +20,27 @@ Inspired by the clean architecture of [ezioMJ/Movie-Alert](https://github.com/ez
 
 ### 2. FMDBT Odisha Target Monitor (`scrape/fmdbt.py`)
 - **Portal:** [Odisha FMDBT Target Status](https://fmdbt.agriodisha.nic.in/public/chktarget)
+- **Extracted Reports:**
+  - **State-wise Target Report**
+  - **District-wise Target Report**
+  - **Mela Target Report**
 - **Monitored Configuration:**
   - **Financial Year:** `2026-27`
   - **District:** `SUNDERGARH`
+  - **State:** `ODISHA`
   - **Monitored Implements:**
     - `SPL-POW- WEEDER`
     - `Reaper`
     - `Power Tiller`
     - `Transplanter`
     - `Combine`
-- **Extracted Categories:** District-wise Target, Achieved, and Available figures for:
+- **Extracted Categories:** Target, Achieved, and Available figures for:
   - **General**
   - **Scheduled Caste (SC)**
   - **Scheduled Tribe (ST)**
 - **Alerting Rules:**
-  - **Availability Gate:** Notifies only when at least one category has `Available > 0`.
-  - **Positive Filtering:** Includes strictly categories with positive availability in the message.
-  - **Duplicate Prevention:** Tracks alerted values per implement in `fmdbt_state.json`.
-  - **Change Detection & Re-arming:** Sends updated alerts when report values change, and automatically triggers fresh alerts when availability becomes positive again after being exhausted.
+  - **Duplicate Prevention:** Tracks alerted values per report type and implement in `fmdbt_state.json`.
+  - **Change Detection:** Sends individual, structured Telegram notifications when report values change or new allocations appear.
 - **State File:** `fmdbt_state.json`
 
 ---
@@ -51,19 +54,25 @@ Inspired by the clean architecture of [ezioMJ/Movie-Alert](https://github.com/ez
 The booking page will be closed from 03.00 PM on Dt.31.08.2026 for the top-up of the target of farm machinery. The bookings will start phase-wise from 10.30 AM on 01.09.2026. The slot details are as follows: <a href="https://agrisnetodisha.ori.nic.in/BookingSchduleSep.html">https://agrisnetodisha.ori.nic.in/BookingSchduleSep.html</a>
 ```
 
-### FMDBT Target Alert Sample
+### FMDBT Target Alert Sample (District-wise)
 ```text
-🚜 <b>FMDBT Target Alert</b>
-<b>Date:</b> 15-10-2026 02:00 PM
+<b>District-wise Target Report:</b>
+
+<b>Date:</b> 15-11-2026 12:31 AM
 <b>Financial Year:</b> 2026-27
 <b>District:</b> SUNDERGARH
-<b>Implement:</b> Power Tiller
+<b>Implement:</b> Reaper
 
-<b>Available Targets:</b>
-• <b>Scheduled Caste (SC):</b> Available: <b>4</b> (Target: 21, Achieved: 17)
-• <b>Scheduled Tribe (ST):</b> Available: <b>3</b> (Target: 25, Achieved: 22)
+<b>Target Status:</b>
 
-🔗 <a href="https://fmdbt.agriodisha.nic.in/public/chktarget">FMDBT Target Portal</a>
+<b>General:</b>
+Target: 18 | Achieved: 17 | Available: 1
+
+<b>Scheduled Caste (SC):</b>
+Target: 14 | Achieved: 14 | Available: 0
+
+<b>Scheduled Tribe (ST):</b>
+Target: 20 | Achieved: 20 | Available: 0
 ```
 
 ---
