@@ -119,20 +119,18 @@ def format_alert_message(report_title, location_label, location_name, financial_
     current_time = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%m-%Y %I:%M %p")
     lines = [
         f"<b>📊 {html.escape(report_title)}:</b>",
-        "<blockquote>",
-        f"<b>Date:</b> {current_time}",
+        "",
+        f"<blockquote><b>Date:</b> {current_time}",
         f"<b>Financial Year:</b> {html.escape(financial_year)}",
         f"<b>{html.escape(location_label)}:</b> {html.escape(location_name)}",
-        f"<b>Implement:</b> {html.escape(implement_name)}",
-        "</blockquote>",
+        f"<b>Implement:</b> {html.escape(implement_name)}</blockquote>",
         "",
         "<b>Target Status:</b>",
-        "<blockquote>",
     ]
     for category_name, values in categories.items():
         lines.extend([
             "",
-            f"<b>{html.escape(category_name)}:</b>",
+            f"<blockquote><b>{html.escape(category_name)}:</b>",
             f"Target: {values['target']} | Achieved: {values['achieved']} | Available: {values['available']}",
         ])
     lines.append("</blockquote>")
