@@ -4,7 +4,7 @@
       "General": {
         "target": 75,
         "achieved": 75,
-        "available": 5
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 86,
@@ -96,7 +96,7 @@
       "Scheduled Caste (SC)": {
         "target": 215,
         "achieved": 215,
-        "available": 8
+        "available": 0
       },
       "Scheduled Tribe (ST)": {
         "target": 686,
@@ -178,7 +178,7 @@
       "General": {
         "target": 16,
         "achieved": 16,
-        "available": 9
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 16,
@@ -221,8 +221,8 @@
       },
       "Scheduled Tribe (ST)": {
         "target": 116,
-        "achieved": 49,
-        "available": 67
+        "achieved": 52,
+        "available": 64
       }
     },
     "Transplanter": {
