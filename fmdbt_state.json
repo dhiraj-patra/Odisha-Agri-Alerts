@@ -9,7 +9,7 @@
       "Scheduled Caste (SC)": {
         "target": 86,
         "achieved": 86,
-        "available": 0
+        "available": 8
       },
       "Scheduled Tribe (ST)": {
         "target": 400,
@@ -159,7 +159,7 @@
       "General": {
         "target": 394,
         "achieved": 394,
-        "available": 0
+        "available": 9
       },
       "Scheduled Caste (SC)": {
         "target": 68,
@@ -256,7 +256,7 @@
       "Scheduled Tribe (ST)": {
         "target": 0,
         "achieved": 0,
-        "available": 0
+        "available": 9
       }
     }
   }
