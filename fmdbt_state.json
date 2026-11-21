@@ -4,24 +4,24 @@
       "General": {
         "target": 75,
         "achieved": 75,
-        "available": 9
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 86,
         "achieved": 86,
-        "available": 8
+        "available": 0
       },
       "Scheduled Tribe (ST)": {
         "target": 400,
         "achieved": 400,
-        "available": 8
+        "available": 0
       }
     },
     "Reaper": {
       "General": {
         "target": 18,
         "achieved": 18,
-        "available": 6
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 14,
@@ -38,7 +38,7 @@
       "General": {
         "target": 96,
         "achieved": 96,
-        "available": 9
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 32,
@@ -55,7 +55,7 @@
       "General": {
         "target": 1,
         "achieved": 1,
-        "available": 8
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 0,
@@ -72,7 +72,7 @@
       "General": {
         "target": 5,
         "achieved": 5,
-        "available": 7
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 1,
@@ -91,7 +91,7 @@
       "General": {
         "target": 521,
         "achieved": 521,
-        "available": 78
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 215,
@@ -108,7 +108,7 @@
       "General": {
         "target": 194,
         "achieved": 194,
-        "available": 5
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 105,
@@ -125,7 +125,7 @@
       "General": {
         "target": 3505,
         "achieved": 3505,
-        "available": 99
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 1071,
@@ -142,7 +142,7 @@
       "General": {
         "target": 446,
         "achieved": 446,
-        "available": 76
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 92,
@@ -159,7 +159,7 @@
       "General": {
         "target": 394,
         "achieved": 394,
-        "available": 10
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 68,
@@ -178,7 +178,7 @@
       "General": {
         "target": 16,
         "achieved": 16,
-        "available": 10
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 16,
@@ -193,9 +193,9 @@
     },
     "Reaper": {
       "General": {
-        "target": 10,
+        "target": 0,
         "achieved": 0,
-        "available": 10
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 0,
@@ -212,7 +212,7 @@
       "General": {
         "target": 11,
         "achieved": 7,
-        "available": 14
+        "available": 4
       },
       "Scheduled Caste (SC)": {
         "target": 47,
@@ -229,7 +229,7 @@
       "General": {
         "target": 4,
         "achieved": 1,
-        "available": 13
+        "available": 3
       },
       "Scheduled Caste (SC)": {
         "target": 2,
@@ -246,7 +246,7 @@
       "General": {
         "target": 0,
         "achieved": 0,
-        "available": 10
+        "available": 0
       },
       "Scheduled Caste (SC)": {
         "target": 0,
