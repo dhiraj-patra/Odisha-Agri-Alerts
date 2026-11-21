@@ -211,8 +211,8 @@
     "Power Tiller": {
       "General": {
         "target": 11,
-        "achieved": 7,
-        "available": 4
+        "achieved": 8,
+        "available": 3
       },
       "Scheduled Caste (SC)": {
         "target": 47,
@@ -221,8 +221,8 @@
       },
       "Scheduled Tribe (ST)": {
         "target": 116,
-        "achieved": 60,
-        "available": 56
+        "achieved": 61,
+        "available": 55
       }
     },
     "Transplanter": {
