@@ -125,12 +125,12 @@ def format_alert_message(report_title, location_label, location_name, financial_
         f"<b>{html.escape(location_label)}:</b> {html.escape(location_name)}",
         f"<b>Implement:</b> {html.escape(implement_name)}</blockquote>",
         "",
-        "<b>Target Status:</b>",
+        "<b>Target Status:</b><blockquote>",
     ]
     for category_name, values in categories.items():
         lines.extend([
             "",
-            f"<blockquote><b>{html.escape(category_name)}:</b>",
+            f"<b>{html.escape(category_name)}:</b>",
             f"Target: {values['target']} | Achieved: {values['achieved']} | Available: {values['available']}",
         ])
     lines.append("</blockquote>")
