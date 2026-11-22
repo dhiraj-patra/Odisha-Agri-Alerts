@@ -221,15 +221,15 @@
       },
       "Scheduled Tribe (ST)": {
         "target": 116,
-        "achieved": 88,
-        "available": 28
+        "achieved": 89,
+        "available": 27
       }
     },
     "Transplanter": {
       "General": {
         "target": 4,
-        "achieved": 1,
-        "available": 3
+        "achieved": 2,
+        "available": 2
       },
       "Scheduled Caste (SC)": {
         "target": 2,
