@@ -30,8 +30,8 @@
       },
       "Scheduled Tribe (ST)": {
         "target": 20,
-        "achieved": 20,
-        "available": 0
+        "achieved": 19,
+        "available": 1
       }
     },
     "Power Tiller": {
@@ -124,13 +124,13 @@
     "Power Tiller": {
       "General": {
         "target": 3505,
-        "achieved": 3505,
-        "available": 0
+        "achieved": 3503,
+        "available": 2
       },
       "Scheduled Caste (SC)": {
         "target": 1071,
-        "achieved": 1071,
-        "available": 0
+        "achieved": 1070,
+        "available": 1
       },
       "Scheduled Tribe (ST)": {
         "target": 1776,
