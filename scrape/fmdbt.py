@@ -1,10 +1,8 @@
-from datetime import datetime
 import json
 import os
 import sys
 import time
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
 import requests
 
@@ -157,8 +155,7 @@ def generate_table(title, categories):
 
 
 def format_alert_message(district_name, financial_year, implement_name, reports_data):
-    now = datetime.now(ZoneInfo("Asia/Kolkata"))
-    current_time = now.strftime("%d-%m-%Y %I:%M %p")
+    current_time = int(time.time())
     lines = [
         {
             "type": "paragraph",
@@ -167,9 +164,9 @@ def format_alert_message(district_name, financial_year, implement_name, reports_
                 " ",
                 {
                     "type": "date_time",
-                    "text": current_time,
-                    "unix_time": int(now.timestamp()),
-                    "date_time_format": "",
+                    "text": str(current_time),
+                    "unix_time": current_time,
+                    "date_time_format": "dt",
                 },
                 "\n",
                 {"type": "bold", "text": "Target Report:"},
