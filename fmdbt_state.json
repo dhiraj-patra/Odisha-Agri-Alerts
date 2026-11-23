@@ -124,8 +124,8 @@
     "Power Tiller": {
       "General": {
         "target": 3505,
-        "achieved": 3505,
-        "available": 0
+        "achieved": 3503,
+        "available": 2
       },
       "Scheduled Caste (SC)": {
         "target": 1071,
