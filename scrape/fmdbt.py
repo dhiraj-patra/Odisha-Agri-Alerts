@@ -25,17 +25,17 @@ IMPLEMENTS = {
 }
 
 REPORTS = {
-    "district": {
-        "title": "District-wise Target Report",
-        "location_label": "District",
-        "location_name": DISTRICT_NAME,
-        "url": f"{BASE_URL}/report/loadpulltarget?finyr={FINANCIAL_YEAR}&district={DISTRICT_CODE}&imp={{implement_id}}",
-    },
     "state": {
         "title": "State-wise Target Report",
         "location_label": "State",
         "location_name": "ODISHA",
         "url": f"{BASE_URL}/report/checkDatainStateTargetReport?finyr={FINANCIAL_YEAR}&imp={{implement_id}}",
+    },
+    "district": {
+        "title": "District-wise Target Report",
+        "location_label": "District",
+        "location_name": DISTRICT_NAME,
+        "url": f"{BASE_URL}/report/loadpulltarget?finyr={FINANCIAL_YEAR}&district={DISTRICT_CODE}&imp={{implement_id}}",
     },
     "mela": {
         "title": "Mela Target Report",
@@ -57,12 +57,12 @@ HEADERS = {
 
 
 def send_telegram_message(token, chat_id, text):
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    url = f"https://api.telegram.org/bot{token}/sendRichMessage"
     payload = {
         "chat_id": chat_id,
-        "text": text,
-        "parse_mode": "HTML",
-        "disable_web_page_preview": True,
+        "rich_message": {
+            "html": text,
+        },
     }
     response = requests.post(url, json=payload, timeout=30)
     response.raise_for_status()
@@ -115,25 +115,37 @@ def parse_categories(report_data):
     }
 
 
-def format_alert_message(report_title, location_label, location_name, financial_year, implement_name, categories):
-    current_time = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%m-%Y %I:%M %p")
+def generate_table(title, categories):
+    header_cells = "".join(f'<th colspan="3">{html.escape(cat)}</th>' for cat in categories)
+    sub_header_cells = "".join("<th>Target</th><th>Achieved</th><th>Available</th>" for _ in categories)
+    data_cells = "".join(
+        f"<td>{values['target']}</td><td>{values['achieved']}</td><td>{values['available']}</td>"
+        for values in categories.values()
+    )
+    return (
+        '<table border="1">'
+        f"<caption><b>{html.escape(title)}</b></caption>"
+        f"<tr>{header_cells}</tr>"
+        f"<tr>{sub_header_cells}</tr>"
+        f"<tr>{data_cells}</tr>"
+        "</table>"
+    )
+
+
+def format_alert_message(district_name, financial_year, implement_name, reports_data):
+    current_time = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%I:%M %p")
     lines = [
-        f"<b>📊 {html.escape(report_title)}:</b>",
-        "",
-        f"<blockquote><b>Date:</b> {current_time}",
-        f"<b>Financial Year:</b> {html.escape(financial_year)}",
-        f"<b>{html.escape(location_label)}:</b> {html.escape(location_name)}",
-        f"<b>Implement:</b> {html.escape(implement_name)}</blockquote>",
-        "",
-        "<b>Target Status:</b><blockquote>",
+        f"<b>TIME:</b> {current_time}<br>",
+        "<b>Target Report:</b><br><br>",
+        f"<b>Financial Year:</b> {html.escape(financial_year)}<br>",
+        f"<b>District:</b> {html.escape(district_name)}<br>",
+        f"<b>Implement:</b> {html.escape(implement_name)}<br>",
     ]
-    for category_name, values in categories.items():
+    for report_title, categories in reports_data:
         lines.extend([
-            f"<b>{html.escape(category_name)}:</b>",
-            f"Target: {values['target']} | Achieved: {values['achieved']} | Available: {values['available']}",
             "",
+            generate_table(report_title, categories),
         ])
-    lines.append("</blockquote>")
     return "\n".join(lines)
 
 
@@ -147,9 +159,12 @@ def main():
     state_changed = False
     alerts_sent = 0
 
-    for report_type, report_config in REPORTS.items():
-        report_state = state.setdefault(report_type, {})
-        for implement_name, implement_id in IMPLEMENTS.items():
+    for implement_name, implement_id in IMPLEMENTS.items():
+        implement_changed = False
+        reports_data = []
+        fetched_state = {}
+
+        for report_type, report_config in REPORTS.items():
             try:
                 report_data = fetch_target_report(report_config["url"].format(implement_id=implement_id))
             except requests.RequestException as exc:
@@ -161,26 +176,35 @@ def main():
                 print(f"No target data returned for {report_config['title']} ({implement_name}).")
                 continue
 
-            if report_state.get(implement_name) == categories:
-                print(f"No changes for {report_config['title']} ({implement_name}).")
-                continue
+            reports_data.append((report_config["title"], categories))
+            fetched_state[report_type] = categories
 
-            print(f"Report change detected for {report_config['title']} ({implement_name})! Sending alert...")
+            report_state = state.setdefault(report_type, {})
+            if report_state.get(implement_name) != categories:
+                implement_changed = True
 
-            message = format_alert_message(
-                report_config["title"],
-                report_config["location_label"],
-                report_config["location_name"],
-                FINANCIAL_YEAR,
-                implement_name,
-                categories,
-            )
-            send_telegram_message(bot_token, chat_id, message)
-            alerts_sent += 1
-            time.sleep(1)
+        if not reports_data:
+            continue
 
-            report_state[implement_name] = categories
-            state_changed = True
+        if not implement_changed:
+            print(f"No changes for {implement_name}.")
+            continue
+
+        print(f"Report change detected for {implement_name}! Sending alert...")
+
+        message = format_alert_message(
+            DISTRICT_NAME,
+            FINANCIAL_YEAR,
+            implement_name,
+            reports_data,
+        )
+        send_telegram_message(bot_token, chat_id, message)
+        alerts_sent += 1
+        time.sleep(1)
+
+        for report_type, categories in fetched_state.items():
+            state.setdefault(report_type, {})[implement_name] = categories
+        state_changed = True
 
     if state_changed:
         save_state(state)

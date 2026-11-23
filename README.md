@@ -54,25 +54,18 @@ Inspired by the clean architecture of [ezioMJ/Movie-Alert](https://github.com/ez
 The booking page will be closed from 03.00 PM on Dt.31.08.2026 for the top-up of the target of farm machinery. The bookings will start phase-wise from 10.30 AM on 01.09.2026. The slot details are as follows: <a href="https://agrisnetodisha.ori.nic.in/BookingSchduleSep.html">https://agrisnetodisha.ori.nic.in/BookingSchduleSep.html</a>
 ```
 
-### FMDBT Target Alert Sample (District-wise)
+### FMDBT Target Alert Sample
 ```text
-<b>District-wise Target Report:</b>
+<b>TIME:</b> 07:09 AM
+<b>Target Report:</b>
 
-<b>Date:</b> 15-11-2026 12:31 AM
 <b>Financial Year:</b> 2026-27
 <b>District:</b> SUNDERGARH
 <b>Implement:</b> Reaper
 
-<b>Target Status:</b>
-
-<b>General:</b>
-Target: 18 | Achieved: 17 | Available: 1
-
-<b>Scheduled Caste (SC):</b>
-Target: 14 | Achieved: 14 | Available: 0
-
-<b>Scheduled Tribe (ST):</b>
-Target: 20 | Achieved: 20 | Available: 0
+[State-wise Target Report Table]
+[District-wise Target Report Table]
+[Mela Target Report Table]
 ```
 
 ---
