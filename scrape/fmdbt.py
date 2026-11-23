@@ -1,5 +1,4 @@
 from datetime import datetime
-import html
 import json
 import os
 import sys
@@ -61,7 +60,7 @@ def send_telegram_message(token, chat_id, text):
     payload = {
         "chat_id": chat_id,
         "rich_message": {
-            "html": text,
+            "blocks": text,
         },
     }
     response = requests.post(url, json=payload, timeout=30)
@@ -116,37 +115,81 @@ def parse_categories(report_data):
 
 
 def generate_table(title, categories):
-    header_cells = "".join(f'<th colspan="3">{html.escape(cat)}</th>' for cat in categories)
-    sub_header_cells = "".join("<th>Target</th><th>Achieved</th><th>Available</th>" for _ in categories)
-    data_cells = "".join(
-        f"<td>{values['target']}</td><td>{values['achieved']}</td><td>{values['available']}</td>"
+    header_cells = [
+        {
+            "text": cat,
+            "is_header": True,
+            "colspan": 3,
+            "align": "center",
+            "valign": "middle",
+        }
+        for cat in categories
+    ]
+    sub_header_cells = [
+        {
+            "text": label,
+            "is_header": True,
+            "align": "center",
+            "valign": "middle",
+        }
+        for _ in categories
+        for label in ("Target", "Achieved", "Available")
+    ]
+    data_cells = [
+        {
+            "text": str(values[key]),
+            "align": "center",
+            "valign": "middle",
+        }
         for values in categories.values()
-    )
-    return (
-        '<table border="1">'
-        f"<caption><b>{html.escape(title)}</b></caption>"
-        f"<tr>{header_cells}</tr>"
-        f"<tr>{sub_header_cells}</tr>"
-        f"<tr>{data_cells}</tr>"
-        "</table>"
-    )
+        for key in ("target", "achieved", "available")
+    ]
+    return {
+        "type": "table",
+        "is_bordered": True,
+        "caption": {"type": "bold", "text": title},
+        "cells": [
+            header_cells,
+            sub_header_cells,
+            data_cells,
+        ],
+    }
 
 
 def format_alert_message(district_name, financial_year, implement_name, reports_data):
-    current_time = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%m-%Y %I:%M %p")
+    now = datetime.now(ZoneInfo("Asia/Kolkata"))
+    current_time = now.strftime("%d-%m-%Y %I:%M %p")
     lines = [
-        f"<b>TIME:</b> {current_time}<br>",
-        "<b>Target Report:</b><br><br>",
-        f"<b>Financial Year:</b> {html.escape(financial_year)}<br>",
-        f"<b>District:</b> {html.escape(district_name)}<br>",
-        f"<b>Implement:</b> {html.escape(implement_name)}<br>",
+        {
+            "type": "paragraph",
+            "text": [
+                {"type": "bold", "text": "TIME:"},
+                " ",
+                {
+                    "type": "date_time",
+                    "text": current_time,
+                    "unix_time": int(now.timestamp()),
+                    "date_time_format": "",
+                },
+                "\n",
+                {"type": "bold", "text": "Target Report:"},
+            ],
+        },
+        {
+            "type": "paragraph",
+            "text": [
+                {"type": "bold", "text": "Financial Year:"},
+                f" {financial_year}\n",
+                {"type": "bold", "text": "District:"},
+                f" {district_name}\n",
+                {"type": "bold", "text": "Implement:"},
+                f" {implement_name}",
+            ],
+        },
     ]
     for report_title, categories in reports_data:
-        lines.extend([
-            "",
-            generate_table(report_title, categories),
-        ])
-    return "\n".join(lines)
+        lines.append(generate_table(report_title, categories))
+    return lines
 
 
 def main():
