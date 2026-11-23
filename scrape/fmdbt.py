@@ -115,44 +115,46 @@ def parse_categories(report_data):
 
 
 def generate_table(title, categories):
-    header_cells = [
-        {
-            "text": cat,
-            "is_header": True,
-            "colspan": 3,
-            "align": "center",
-            "valign": "middle",
-        }
-        for cat in categories
-    ]
-    sub_header_cells = [
+    header_row = [
         {
             "text": label,
             "is_header": True,
             "align": "center",
             "valign": "middle",
         }
-        for _ in categories
-        for label in ("Target", "Achieved", "Available")
+        for label in ("Category", "Target", "Achieved", "Available")
     ]
-    data_cells = [
-        {
-            "text": str(values[key]),
-            "align": "center",
-            "valign": "middle",
-        }
-        for values in categories.values()
-        for key in ("target", "achieved", "available")
+    data_rows = [
+        [
+            {
+                "text": cat,
+                "is_header": True,
+                "align": "center",
+                "valign": "middle",
+            },
+            {
+                "text": str(values["target"]),
+                "align": "center",
+                "valign": "middle",
+            },
+            {
+                "text": str(values["achieved"]),
+                "align": "center",
+                "valign": "middle",
+            },
+            {
+                "text": str(values["available"]),
+                "align": "center",
+                "valign": "middle",
+            },
+        ]
+        for cat, values in categories.items()
     ]
     return {
         "type": "table",
         "is_bordered": True,
         "caption": {"type": "bold", "text": title},
-        "cells": [
-            header_cells,
-            sub_header_cells,
-            data_cells,
-        ],
+        "cells": [header_row, *data_rows],
     }
 
 
