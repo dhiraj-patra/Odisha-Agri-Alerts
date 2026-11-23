@@ -133,7 +133,7 @@ def generate_table(title, categories):
 
 
 def format_alert_message(district_name, financial_year, implement_name, reports_data):
-    current_time = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%I:%M %p")
+    current_time = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%m-%Y %I:%M %p")
     lines = [
         f"<b>TIME:</b> {current_time}<br>",
         "<b>Target Report:</b><br><br>",
