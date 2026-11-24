@@ -101,12 +101,12 @@ def parse_categories(report_data):
             "achieved": int(row.get("bookingnormal", 0)),
             "available": int(row.get("phybal", 0)),
         },
-        "Scheduled Caste (SC)": {
+        "Scheduled Caste": {
             "target": int(row.get("targetsc", 0)),
             "achieved": int(row.get("bookingsc", 0)),
             "available": int(row.get("scbal", 0)),
         },
-        "Scheduled Tribe (ST)": {
+        "Scheduled Tribe": {
             "target": int(row.get("targetst", 0)),
             "achieved": int(row.get("bookingst", 0)),
             "available": int(row.get("stbal", 0)),
