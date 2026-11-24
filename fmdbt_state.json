@@ -6,12 +6,12 @@
         "achieved": 75,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 86,
         "achieved": 86,
         "available": 0
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 400,
         "achieved": 400,
         "available": 0
@@ -23,12 +23,12 @@
         "achieved": 18,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 14,
         "achieved": 14,
         "available": 0
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 20,
         "achieved": 20,
         "available": 0
@@ -40,15 +40,15 @@
         "achieved": 96,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 32,
         "achieved": 32,
         "available": 0
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 164,
         "achieved": 164,
-        "available": 10
+        "available": 0
       }
     },
     "Combine": {
@@ -57,12 +57,12 @@
         "achieved": 1,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 0,
         "achieved": 0,
         "available": 0
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 1,
         "achieved": 1,
         "available": 0
@@ -74,12 +74,12 @@
         "achieved": 5,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 1,
         "achieved": 1,
         "available": 0
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 5,
         "achieved": 5,
         "available": 0
@@ -93,12 +93,12 @@
         "achieved": 521,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 215,
         "achieved": 215,
         "available": 0
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 686,
         "achieved": 685,
         "available": 1
@@ -110,12 +110,12 @@
         "achieved": 194,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 105,
         "achieved": 105,
         "available": 0
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 86,
         "achieved": 86,
         "available": 0
@@ -127,12 +127,12 @@
         "achieved": 3505,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 1071,
         "achieved": 1071,
         "available": 0
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 1776,
         "achieved": 1776,
         "available": 0
@@ -144,12 +144,12 @@
         "achieved": 446,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 92,
         "achieved": 92,
         "available": 0
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 104,
         "achieved": 104,
         "available": 0
@@ -161,12 +161,12 @@
         "achieved": 394,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 68,
         "achieved": 68,
         "available": 0
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 41,
         "achieved": 41,
         "available": 0
@@ -180,12 +180,12 @@
         "achieved": 16,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 16,
         "achieved": 16,
         "available": 0
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 66,
         "achieved": 66,
         "available": 0
@@ -197,12 +197,12 @@
         "achieved": 0,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 0,
         "achieved": 0,
         "available": 0
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 0,
         "achieved": 0,
         "available": 0
@@ -214,12 +214,12 @@
         "achieved": 11,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 47,
         "achieved": 13,
         "available": 34
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 116,
         "achieved": 105,
         "available": 11
@@ -231,12 +231,12 @@
         "achieved": 2,
         "available": 2
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 2,
         "achieved": 1,
         "available": 1
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 2,
         "achieved": 2,
         "available": 0
@@ -248,12 +248,12 @@
         "achieved": 0,
         "available": 0
       },
-      "Scheduled Caste (SC)": {
+      "Scheduled Caste": {
         "target": 0,
         "achieved": 0,
         "available": 0
       },
-      "Scheduled Tribe (ST)": {
+      "Scheduled Tribe": {
         "target": 0,
         "achieved": 0,
         "available": 0
